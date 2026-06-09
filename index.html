@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAM Clinics | Digital Performance Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ram-green:#0f5b3f;
+      --ram-green-2:#174f3a;
+      --ram-brown:#8a6a3e;
+      --ram-gold:#c6a15b;
+      --cream:#f7f1e8;
+      --soft:#fffbf4;
+      --ink:#15231c;
+      --muted:#6d766f;
+      --line:rgba(15,91,63,.14);
+      --card:rgba(255,255,255,.78);
+      --shadow: 0 24px 70px rgba(15, 91, 63, .14);
+      --radius:26px;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:
+      radial-gradient(circle at top left, rgba(198,161,91,.28), transparent 32%),
+      radial-gradient(circle at 85% 10%, rgba(15,91,63,.18), transparent 30%),
+      linear-gradient(135deg,#fbf7ef 0%,#f7efe3 42%,#eef4ef 100%);min-height:100vh}
+    body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(15,91,63,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(15,91,63,.035) 1px,transparent 1px);background-size:42px 42px;pointer-events:none}
+    .wrap{position:relative;max-width:1440px;margin:0 auto;padding:28px}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:stretch;margin-bottom:22px}
+    .panel{background:var(--card);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.68);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .hero-main{padding:34px;position:relative;background:linear-gradient(135deg,rgba(15,91,63,.98),rgba(23,79,58,.94) 52%,rgba(138,106,62,.92));color:#fff;min-height:330px}
+    .brand{display:flex;gap:14px;align-items:center;margin-bottom:34px}.mark{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#fff,#e5d5b4);color:var(--ram-green);display:grid;place-items:center;font-weight:900;font-size:22px;box-shadow:0 16px 36px rgba(0,0,0,.18)}
+    .eyebrow{font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#e9d9b7;font-size:12px}.brand-title{font-weight:800;font-size:18px}.hero h1{font-size:clamp(34px,5vw,66px);line-height:.95;margin:0 0 16px;letter-spacing:-.06em}.hero p{margin:0;max-width:760px;color:rgba(255,255,255,.82);font-size:17px;line-height:1.65}.hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.badge{border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.12);padding:10px 14px;border-radius:999px;font-weight:700;color:#fff;font-size:13px}.hero-art{position:absolute;right:-85px;bottom:-95px;width:360px;height:360px;border-radius:50%;border:56px solid rgba(255,255,255,.08)}
+    .hero-side{padding:26px;display:grid;gap:14px}.side-card{padding:20px;border-radius:22px;background:linear-gradient(135deg,#fff,rgba(247,241,232,.84));border:1px solid var(--line)}.side-card small{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.1em}.side-card strong{display:block;margin-top:8px;font-size:34px;color:var(--ram-green);letter-spacing:-.04em}.side-card span{color:var(--muted);font-weight:600}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}.metric{padding:22px;border-radius:24px;background:#fff;border:1px solid var(--line);box-shadow:0 12px 34px rgba(15,91,63,.08);position:relative;overflow:hidden}.metric:after{content:"";position:absolute;right:-32px;top:-32px;width:108px;height:108px;border-radius:50%;background:rgba(198,161,91,.16)}.metric .label{font-size:13px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.metric .value{font-size:30px;font-weight:900;color:var(--ram-green);margin-top:10px;letter-spacing:-.05em}.metric .note{font-size:13px;color:var(--ram-brown);font-weight:700;margin-top:8px}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;margin-bottom:22px}.card{padding:26px}.card h2{margin:0 0 6px;font-size:24px;letter-spacing:-.03em}.sub{margin:0 0 20px;color:var(--muted);font-weight:500}.chartBox{height:330px}.department{display:grid;gap:12px}.dept{padding:16px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.72)}.dept-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}.dept h3{margin:0;font-size:16px}.pill{padding:7px 10px;border-radius:999px;background:rgba(15,91,63,.1);color:var(--ram-green);font-weight:800;font-size:12px}.bar{height:10px;background:#eee5d7;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ram-green),var(--ram-gold))}.dept-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;font-size:12px;color:var(--muted)}.dept-meta b{display:block;color:var(--ink);font-size:14px}
+    .platforms{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.platform{padding:18px;border-radius:22px;background:linear-gradient(180deg,#fff,#fbf4e9);border:1px solid var(--line)}.platform h3{margin:0 0 14px}.stat{display:flex;justify-content:space-between;border-top:1px solid rgba(15,91,63,.1);padding:10px 0;font-size:13px;color:var(--muted)}.stat b{color:var(--ink)}
+    .insights{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.insight{padding:22px;border-radius:24px;background:linear-gradient(135deg,rgba(15,91,63,.98),rgba(23,79,58,.94));color:#fff;min-height:180px}.insight:nth-child(even){background:linear-gradient(135deg,rgba(138,106,62,.96),rgba(198,161,91,.9))}.insight h3{margin:0 0 10px;font-size:17px}.insight p{margin:0;color:rgba(255,255,255,.82);line-height:1.55;font-size:14px}.footer{padding:22px;text-align:center;color:var(--muted);font-weight:700}
+    @media(max-width:1050px){.hero,.grid{grid-template-columns:1fr}.metrics,.platforms,.insights{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:620px){.wrap{padding:14px}.metrics,.platforms,.insights{grid-template-columns:1fr}.hero-main{padding:24px}.metric .value{font-size:25px}.chartBox{height:280px}.dept-meta{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="panel hero-main">
+        <div class="brand"><div class="mark">RAM</div><div><div class="eyebrow">Digital Performance Dashboard</div><div class="brand-title">RAM Clinics</div></div></div>
+        <h1>May 2026<br/>Performance Overview</h1>
+        <p>A premium one-page executive dashboard summarizing digital campaign scale, departmental performance, CRM campaigns, platform spend, and next optimization priorities.</p>
+        <div class="hero-badges"><span class="badge">54 Campaigns</span><span class="badge">Multi-platform Coverage</span><span class="badge">Dental • Derma • Medical</span><span class="badge">SAR Spend View</span></div>
+        <div class="hero-art"></div>
+      </div>
+      <aside class="panel hero-side">
+        <div class="side-card"><small>Total Spend</small><strong>2.49M SAR</strong><span>Across active paid campaigns</span></div>
+        <div class="side-card"><small>Total Impressions</small><strong>244.6M</strong><span>Brand visibility at scale</span></div>
+        <div class="side-card"><small>Total Clicks</small><strong>1.78M</strong><span>High traffic volume generated</span></div>
+      </aside>
+    </section>
+
+    <section class="metrics">
+      <div class="metric"><div class="label">Reach</div><div class="value">40.96M</div><div class="note">Monthly audience reached</div></div>
+      <div class="metric"><div class="label">Views</div><div class="value">94.10M</div><div class="note">Video/content views</div></div>
+      <div class="metric"><div class="label">Engagement</div><div class="value">17.30M</div><div class="note">Interactions generated</div></div>
+      <div class="metric"><div class="label">Followers Growth</div><div class="value">12,033</div><div class="note">Community growth</div></div>
+    </section>
+
+    <section class="grid">
+      <div class="panel card">
+        <h2>Performance by Department</h2><p class="sub">Lead volume and spend distribution across major service lines.</p>
+        <div class="chartBox"><canvas id="departmentChart"></canvas></div>
+      </div>
+      <div class="panel card">
+        <h2>Department Details</h2><p class="sub">Key operational metrics extracted from the report.</p>
+        <div class="department" id="deptList"></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel card">
+        <h2>Platform Performance</h2><p class="sub">Reach, clicks, impressions and spend by media platform.</p>
+        <div class="chartBox"><canvas id="platformChart"></canvas></div>
+      </div>
+      <div class="panel card">
+        <h2>CRM Campaign Performance</h2><p class="sub">CRM pipeline and conversion health snapshot.</p>
+        <div class="chartBox"><canvas id="crmChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="panel card">
+      <h2>Platform Breakdown</h2><p class="sub">Quick executive comparison for budget and output.</p>
+      <div class="platforms" id="platformCards"></div>
+    </section>
+
+    <section class="panel card" style="margin-top:22px">
+      <h2>Where We Stand & What’s Next</h2><p class="sub">Challenges and recommendations translated into executive action points.</p>
+      <div class="insights">
+        <div class="insight"><h3>Campaigns at Scale</h3><p>Paid campaigns are generating strong reach, impressions and click volume across active platforms.</p></div>
+        <div class="insight"><h3>Lead Generation Growth</h3><p>All departments are running active campaigns producing leads with multiple channels contributing to the pipeline.</p></div>
+        <div class="insight"><h3>Budget Efficiency</h3><p>Review allocation monthly and shift spend toward strongest platforms and campaigns based on actual results.</p></div>
+        <div class="insight"><h3>Creative Testing</h3><p>Continue A/B testing ad formats, messaging and visuals to prevent fatigue and improve lead quality.</p></div>
+      </div>
+    </section>
+    <div class="footer">RAM Clinics — Digital Performance Report | May 2026</div>
+  </main>
+<script>
+const green='#0f5b3f', brown='#8a6a3e', gold='#c6a15b', green2='#1f7655';
+Chart.defaults.font.family='Inter'; Chart.defaults.color='#4d5b53';
+const fmt = n => new Intl.NumberFormat('en-US').format(n);
+const depts=[
+  {name:'Dental', reach:13461300, impressions:122516762, clicks:1275164, leads:5810, spent:900838.44},
+  {name:'Derma', reach:7997420, impressions:45021169, clicks:292515, leads:4590, spent:917517.33},
+  {name:'Hair Transplant', reach:1156087, impressions:5453622, clicks:26039, leads:1198, spent:94108},
+  {name:'Plastic Surgery', reach:557964, impressions:1712820, clicks:7627, leads:390, spent:28674},
+  {name:'Medical', reach:179955, impressions:410464, clicks:3513, leads:171, spent:10380.06}
+];
+const platforms=[
+  {name:'Instagram', reach:20987782, impressions:135714155, clicks:503295, spent:993908},
+  {name:'Snapchat', reach:11066849, impressions:55334247, clicks:191980, spent:728267},
+  {name:'Google Ads', reach:4004094, impressions:19130271, clicks:989266, spent:672736},
+  {name:'TikTok', reach:4906084, impressions:34425907, clicks:93249, spent:95818}
+];
+new Chart(document.getElementById('departmentChart'),{type:'bar',data:{labels:depts.map(d=>d.name),datasets:[{label:'Leads',data:depts.map(d=>d.leads),backgroundColor:green,borderRadius:12},{label:'Spend / 100 SAR',data:depts.map(d=>Math.round(d.spent/100)),backgroundColor:gold,borderRadius:12}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(15,91,63,.08)'}}}}});
+new Chart(document.getElementById('platformChart'),{type:'doughnut',data:{labels:platforms.map(p=>p.name),datasets:[{data:platforms.map(p=>p.spent),backgroundColor:[green,gold,brown,green2],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'64%',plugins:{legend:{position:'bottom'}}}});
+new Chart(document.getElementById('crmChart'),{type:'line',data:{labels:['Total','Reached','Qualified','Rate %','Follow-up','Converted','Closed','Rate %'],datasets:[{label:'CRM Snapshot',data:[100440,76419,55683,73000,51796,27631,12082,44000],borderColor:green,backgroundColor:'rgba(15,91,63,.14)',fill:true,tension:.42,pointRadius:5,pointBackgroundColor:gold}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(15,91,63,.08)'}}}}});
+document.getElementById('deptList').innerHTML=depts.map(d=>{const max=5810;return `<div class="dept"><div class="dept-top"><h3>${d.name}</h3><span class="pill">${fmt(d.leads)} Leads</span></div><div class="bar"><div class="fill" style="width:${Math.max(7,d.leads/max*100)}%"></div></div><div class="dept-meta"><span><b>${fmt(d.reach)}</b>Reach</span><span><b>${fmt(d.clicks)}</b>Clicks</span><span><b>${fmt(Math.round(d.spent))} SAR</b>Spent</span></div></div>`}).join('');
+document.getElementById('platformCards').innerHTML=platforms.map(p=>`<div class="platform"><h3>${p.name}</h3><div class="stat"><span>Reach</span><b>${fmt(p.reach)}</b></div><div class="stat"><span>Impressions</span><b>${fmt(p.impressions)}</b></div><div class="stat"><span>Clicks</span><b>${fmt(p.clicks)}</b></div><div class="stat"><span>Spent</span><b>${fmt(p.spent)} SAR</b></div></div>`).join('');
+</script>
+</body>
+</html>
